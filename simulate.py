@@ -23,8 +23,7 @@ def apply_operator(location, dice_value):
             elif operator == '*':
                 result = location * dice_value
             elif operator == '/':
-                if dice_value != 0 and location % dice_value == 0:
-                    result = location // dice_value
+                result = location // dice_value
 
             # Ensure result is within the bounds
             if not (0 <= result <= 101):
@@ -38,9 +37,9 @@ def apply_operator(location, dice_value):
 data = []
 location = 0  # Starting location for a new game
 for _ in range(1000000):
-    dice1 = random.randint(1, 11)
-    dice2 = random.randint(1, 11)
-    state = location * 100 + int(f"{dice1}{dice2}")
+    dice1 = random.randint(1, 10)
+    dice2 = random.randint(1, 10)
+    state = location * 10000 + int(f"{dice1}{dice2}")
 
     # Apply the operators, retrying as needed for valid operators
     new_location, op1 = apply_operator(location, dice1)
@@ -49,7 +48,7 @@ for _ in range(1000000):
 
     # Determine reward and next state
     reward = 10000 if new_location == 101 else -1
-    next_state = new_location * 100 + int(f"{dice1}{dice2}")
+    next_state = new_location * 10000 + int(f"{dice1}{dice2}")
 
     # Append data
     data.append([state, action, reward, next_state])
