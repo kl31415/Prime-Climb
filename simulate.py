@@ -59,5 +59,3 @@ with open(output_path, mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(['s', 'a', 'r', 'sp'])
     writer.writerows(data)
-
-output_path
