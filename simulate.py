@@ -38,8 +38,8 @@ def apply_operator(location, dice_value):
 data = []
 location = 0  # Starting location for a new game
 for _ in range(1000000):
-    dice1 = random.randint(1, 10)
-    dice2 = random.randint(1, 10)
+    dice1 = random.randint(1, 11)
+    dice2 = random.randint(1, 11)
     state = location * 100 + int(f"{dice1}{dice2}")
 
     # Apply the operators, retrying as needed for valid operators
