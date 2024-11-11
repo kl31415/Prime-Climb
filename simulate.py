@@ -33,7 +33,7 @@ def apply_operator(location, dice_value):
 # Generate simulation data
 data = []
 location = 0  # Starting location for a new game
-for _ in range(10000000):
+for _ in range(1000000):
     dice1 = random.randint(1, 10)
     dice2 = random.randint(1, 10)
     state = location * 100 + int(f"{dice1}{dice2}")
