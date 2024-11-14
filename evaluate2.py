@@ -1,4 +1,5 @@
 import random
+from train2 import eps, gamma, lr
 
 # Define operators and their mapping to numbers
 operators = ['+', '-', '*', '/']
@@ -30,12 +31,16 @@ def apply_operator(location, dice_value, operator):
             elif operator == '*':
                 result = location * dice_value
             elif operator == '/':
-                result = location // dice_value
-            
+                # Check if dice_value divides location without remainder
+                if location % dice_value == 0:
+                    result = location // dice_value  # Perform integer division
+                else:
+                    result = None  # Invalid division (remainder present)
+
             # If the result is valid (between 0 and 101), return it
             if result is not None and 0 <= result <= 101:
                 return result
-            
+
             # Otherwise, select a new random operator and try again
             operator = random.choice(operators)
         except:
@@ -98,8 +103,8 @@ def run_simulations(policy, num_simulations=100000):
 
 # Main execution
 if __name__ == "__main__":
-    # Load policy file (adjust the path as necessary)
-    policy_file_path = 'prime_climb.policy'
+    # Load policy file (adjust train2.py as necessary)
+    policy_file_path = f'eps={eps},gamma={gamma},lr={lr}.policy'
     policy = load_policy(policy_file_path)
     
     # Run simulations

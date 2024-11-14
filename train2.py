@@ -3,16 +3,21 @@ import random
 import time
 
 start = time.time()
-gamma = 1
 Q = np.zeros((1011011, 16))
 policy = np.zeros(1011011)
-for _ in range(1000):
+
+# HYPERPARAMETERS
+eps = 1
+gamma = 1
+lr = 0.1
+
+for _ in range(eps):
     print(_)
     with open("prime_climb_simulation.csv") as f:
         for index, line in enumerate(f):
             if index != 0:
                 s, a, r, sp = map(int, line.strip().split(","))
-                Q[s, a] = Q[s, a] + 0.3 * (r + gamma * Q[sp, np.argmax(Q[sp])] - Q[s, a])
+                Q[s, a] = Q[s, a] + lr * (r + gamma * Q[sp, np.argmax(Q[sp])] - Q[s, a])
 for i in range(1011011):
     if not np.any(Q[i]):
         policy[i] = random.randint(0, 15)
@@ -27,4 +32,4 @@ def save_policy(P, path):
             if i != P.size - 1:
                 f.write("\n")
 
-save_policy(policy, "prime_climb.policy")
+save_policy(policy, f"eps={eps},gamma={gamma},lr={lr}.policy")
