@@ -1,5 +1,4 @@
 import random
-from train2 import eps, gamma, lr
 
 # Define operators and their mapping to numbers
 operators = ['+', '-', '*', '/']
@@ -103,8 +102,8 @@ def run_simulations(policy, num_simulations=100000):
 
 # Main execution
 if __name__ == "__main__":
-    # Load policy file (adjust train2.py as necessary)
-    policy_file_path = f'eps={eps},gamma={gamma},lr={lr}.policy'
+    # Load policy file (pay attention to parameters!)
+    policy_file_path = "eps=10000,gamma=1,lr=0.1.policy"
     policy = load_policy(policy_file_path)
     
     # Run simulations

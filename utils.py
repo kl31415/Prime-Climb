@@ -11,22 +11,18 @@ def get_all_possible_transitions():
     
     # For each starting position
     for pos in range(102):
-        # For each possible dice roll combination
+        # For each possible dice roll combination (no doubles)
         for dice1 in range(1, 11):
-            for dice2 in range(dice1, 11):  # dice2 >= dice1 since order doesn't matter
-                is_double = dice1 == dice2
-                
+            for dice2 in range(1, 11):  # Consider both dice independently
                 # Get moves from first die
-                moves1 = apply_operations(pos, dice1, 4 if is_double else 2)
+                moves1 = apply_operations(pos, dice1, 2)
                 for move in moves1:
                     transitions[pos].add(move)
                     
-                # Get moves from second die if not doubles
-                if not is_double:
-                    for intermediate in moves1:
-                        moves2 = apply_operations(intermediate, dice2, 2)
-                        for move in moves2:
-                            transitions[pos].add(move)
+                # Get moves from second die
+                moves2 = apply_operations(move, dice2, 2)
+                for move in moves2:
+                    transitions[pos].add(move)
                             
     return transitions
 
@@ -62,8 +58,7 @@ def apply_operations(current_pos, number, applications=2):
     return possible_positions if possible_positions else {current_pos}
 
 def roll_dice():
-    """Roll two 10-sided dice and return the dice rolls along with a boolean indicating if they are doubles."""
+    """Roll two 10-sided dice and return the dice rolls"""
     dice1 = np.random.randint(1, 11)
     dice2 = np.random.randint(1, 11)
-    is_double = dice1 == dice2
-    return dice1, dice2, is_double
+    return dice1, dice2  # Removed the double check

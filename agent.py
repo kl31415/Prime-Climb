@@ -46,6 +46,27 @@ class QLearningAgent:
         # Choose the action with the highest Q-value
         return max(valid_moves.items(), key=lambda x: x[1])[0]
     
+    def choose_action_eval(self, state, possible_moves):
+        if not possible_moves:
+            # If there are no possible moves, return state as a fallback or a default action
+            return state
+        
+        # Get Q-values for each possible move, handling the case where state might not exist in q_values
+        valid_moves = {}
+        for move in possible_moves:
+            # If state is not in q_values, initialize its dictionary
+            if state not in self.q_values:
+                self.q_values[state] = {}
+            
+            # If move is not in q_values[state], initialize its Q-value
+            if move not in self.q_values[state]:
+                self.q_values[state][move] = 0  # Default Q-value for uninitialized moves
+            
+            valid_moves[move] = self.q_values[state][move]
+        
+        # Choose the action with the highest Q-value
+        return max(valid_moves.items(), key=lambda x: x[1])[0]
+    
     def update_q_value(self, state, next_state, reward, done):
         if not self.transitions[next_state] and not done:
             return  # No update if no valid transitions from next state
