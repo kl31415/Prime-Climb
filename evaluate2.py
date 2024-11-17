@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 # Define operators and their mapping to numbers
 operators = ['+', '-', '*', '/']
@@ -100,12 +101,39 @@ def run_simulations(policy, num_simulations=100000):
 
     return results, errors
 
+
+
+# Function to plot convergence or error rate
+def plot_convergence(results, errors):
+    # Plot histogram of results (number of turns to reach 101)
+    plt.figure(figsize=(12, 6))
+    plt.hist(results, bins=30, alpha=0.7, color='blue', edgecolor='black')
+    plt.title("Histogram of Turns to Reach Goal State (101)")
+    plt.xlabel("Number of Turns")
+    plt.ylabel("Frequency")
+    plt.grid(True)
+    plt.show()
+
+    # Plot error rate over simulations
+    total_simulations = len(results) + errors
+    error_rate = errors / total_simulations
+    plt.figure(figsize=(12, 6))
+    plt.bar(["Errors", "Successes"], [errors, len(results)], color=["red", "green"])
+    plt.title("Error Rate vs. Successful Simulations")
+    plt.ylabel("Count")
+    plt.text(0, errors / 2, f"Error Rate: {error_rate:.2%}", ha="center", va="center", fontsize=12, color="white")
+    plt.grid(axis='y')
+    plt.show()
+
+
 # Main execution
 if __name__ == "__main__":
     # Load policy file (pay attention to parameters!)
-    policy_file_path = "eps=10000,gamma=1,lr=0.1.policy"
+    #policy_file_path = "eps=10000,gamma=1,lr=0.1.policy"
+    policy_file_path = "eps=10000,gamma=0.9,lr=0.1.policy"
     policy = load_policy(policy_file_path)
     
     # Run simulations
     results, errors = run_simulations(policy)
     print(sum(results) / len(results))
+    plot_convergence(results, errors)
