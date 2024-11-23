@@ -7,7 +7,7 @@ Q = np.zeros((1011011, 16))
 policy = np.zeros(1011011)
 
 # HYPERPARAMETERS
-eps = 10000
+eps = 5000
 gamma = 1
 lr = 0.1
 

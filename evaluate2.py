@@ -103,9 +103,13 @@ def run_simulations(policy, num_simulations=100000):
 # Main execution
 if __name__ == "__main__":
     # Load policy file (pay attention to parameters!)
-    policy_file_path = "eps=10000,gamma=1,lr=0.1.policy"
+    policy_file_path = "eps=1000,gamma=1,lr=0.1.policy"
     policy = load_policy(policy_file_path)
     
     # Run simulations
     results, errors = run_simulations(policy)
     print(sum(results) / len(results))
+
+# eps = 1000, gamma = 1, lr = 0.1: 34.264
+# eps = 5000, gamma = 1, lr = 0.1: 34.368
+# eps = 10000, gamma = 1, lr = 0.1: 34.373
