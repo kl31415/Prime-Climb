@@ -9,7 +9,7 @@ policy = np.zeros(1011011)
 # HYPERPARAMETERS
 eps = 5000
 gamma = 1
-lr = 0.1
+lr = 0.4
 
 for _ in range(eps):
     print(_)
