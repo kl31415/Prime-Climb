@@ -50,7 +50,7 @@ def apply_operator(location, dice_value, operator):
             return None
 
 # Run simulations with the "roll again" rule for primes
-def run_simulations_with_rollagain(policy, num_simulations=100000):
+def run_simulations_with_rollagain(policy, num_simulations=1):
     results = []
     errors = 0
     for _ in range(num_simulations):
@@ -61,6 +61,9 @@ def run_simulations_with_rollagain(policy, num_simulations=100000):
             # Roll two dice
             dice1 = random.randint(1, 10)
             dice2 = random.randint(1, 10)
+            print(f"Location: {location}")
+            print(f"Dice 1: {dice1}")
+            print(f"Dice 2: {dice2}")
             state = location * 10000 + int(f"{dice1}{dice2}")
 
             # Look up action in policy
@@ -82,11 +85,14 @@ def run_simulations_with_rollagain(policy, num_simulations=100000):
             # Update location and increment turn count
             location = new_location
             turns += 1
+            print(f"New location: {location}")
 
             # Check if the pawn lands on a prime and apply "roll again"
             while location in primes:
                 extra_dice1 = random.randint(1, 10)
                 extra_dice2 = random.randint(1, 10)
+                print(f"Extra dice 1: {extra_dice1}")
+                print(f"Extra dice 2: {extra_dice2}")
                 state = location * 10000 + int(f"{extra_dice1}{extra_dice2}")
 
                 action_number = policy[state]
@@ -105,6 +111,7 @@ def run_simulations_with_rollagain(policy, num_simulations=100000):
                     break
                 
                 location = new_location  # Update location after extra rolls
+                print(f"Extra location: {location}")
 
             # End simulation if goal is reached
             if location == 101:
@@ -139,7 +146,7 @@ def plot_convergence(results, errors):
 # Main execution
 if __name__ == "__main__":
     # Load policy file
-    policy_file_path = "eps=10,gamma=1,lr=0.5,reward_type=linear.policy"
+    policy_file_path = "eps=10000,gamma=1,lr=0.1,reward_type=nonlinear.policy"
     policy = load_policy(policy_file_path)
     
     # Run simulations with "roll again" rule
