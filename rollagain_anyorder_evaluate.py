@@ -159,7 +159,7 @@ def plot_convergence(results, errors):
 # Main execution
 if __name__ == "__main__":
     # Load policy file
-    policy_file_path = "anyorder_eps=10000,gamma=1,lr=0.1,reward_type=nonlinear.policy"
+    policy_file_path = "anyorder_eps=10000,gamma=1,lr=0.1,reward_type=linear.policy"
     policy = load_policy(policy_file_path)
     
     # Run simulations with "roll again" rule

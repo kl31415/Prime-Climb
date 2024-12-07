@@ -21,7 +21,7 @@ policy = np.zeros(1011011)
 eps = 10000
 gamma = 1
 lr = 0.1
-reward_type = "nonlinear"
+reward_type = "linear"
 
 for _ in range(eps):
     print(f"Episode {_ + 1}")
