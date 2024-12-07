@@ -39,8 +39,21 @@ def apply_operator(location, dice_value, operator):
     except:
         return None
 
+# Function to attempt all operator pairs as a fallback
+def fallback_operations(location, dice1, dice2):
+    remaining_actions = list(operator_mapping.values())
+    random.shuffle(remaining_actions)  # Randomize the order of actions
+    for op1, op2 in remaining_actions:
+        new_location = apply_operator(location, dice1, op1)
+        if new_location is None:
+            continue
+        new_location = apply_operator(new_location, dice2, op2)
+        if new_location is not None:
+            return new_location
+    return None  # If no valid operation pair is found
+
 # Run simulations with the "roll again" rule for primes
-def run_simulations_with_rollagain(policy, num_simulations=1):
+def run_simulations_with_rollagain(policy, num_simulations=100000):
     results = []
     errors = 0
     for _ in range(num_simulations):
@@ -51,8 +64,6 @@ def run_simulations_with_rollagain(policy, num_simulations=1):
             # Roll two dice
             dice1 = random.randint(1, 10)
             dice2 = random.randint(1, 10)
-            print(f"Location: {location}")
-            print(f"Dice 1: {dice1}, Dice 2: {dice2}")
 
             # Consider both dice orders
             dice_permutations = [(dice1, dice2), (dice2, dice1)]
@@ -63,11 +74,15 @@ def run_simulations_with_rollagain(policy, num_simulations=1):
                 action_number = policy[state]
                 op1, op2 = operator_mapping[action_number]
 
-                # Apply operators to determine new location
+                # Try the learned actions
                 new_location = apply_operator(location, d1, op1)
+                if new_location is not None:
+                    new_location = apply_operator(new_location, d2, op2)
+                
+                # If learned actions fail, try fallback
                 if new_location is None:
-                    continue
-                new_location = apply_operator(new_location, d2, op2)
+                    new_location = fallback_operations(location, d1, d2)
+
                 if new_location is not None and (best_result is None or new_location > best_result):
                     best_result = new_location
 
@@ -79,13 +94,11 @@ def run_simulations_with_rollagain(policy, num_simulations=1):
             # Update location and increment turn count
             location = best_result
             turns += 1
-            print(f"New location: {location}")
 
             # Check if the pawn lands on a prime and apply "roll again"
             while location in primes:
                 extra_dice1 = random.randint(1, 10)
                 extra_dice2 = random.randint(1, 10)
-                print(f"Extra dice 1: {extra_dice1}, Extra dice 2: {extra_dice2}")
                 dice_permutations = [(extra_dice1, extra_dice2), (extra_dice2, extra_dice1)]
                 extra_best_result = None
 
@@ -94,11 +107,15 @@ def run_simulations_with_rollagain(policy, num_simulations=1):
                     action_number = policy[state]
                     op1, op2 = operator_mapping[action_number]
 
-                    # Apply extra dice rolls
+                    # Try the learned actions
                     new_location = apply_operator(location, d1, op1)
+                    if new_location is not None:
+                        new_location = apply_operator(new_location, d2, op2)
+                    
+                    # If learned actions fail, try fallback
                     if new_location is None:
-                        continue
-                    new_location = apply_operator(new_location, d2, op2)
+                        new_location = fallback_operations(location, d1, d2)
+
                     if new_location is not None and (extra_best_result is None or new_location > extra_best_result):
                         extra_best_result = new_location
 
@@ -108,7 +125,6 @@ def run_simulations_with_rollagain(policy, num_simulations=1):
                     break
 
                 location = extra_best_result  # Update location after extra rolls
-                print(f"Extra location: {location}")
 
             if error:
                 break
@@ -143,7 +159,7 @@ def plot_convergence(results, errors):
 # Main execution
 if __name__ == "__main__":
     # Load policy file
-    policy_file_path = "eps=10000,gamma=1,lr=0.1,reward_type=nonlinear.policy"
+    policy_file_path = "anyorder_eps=10000,gamma=1,lr=0.1,reward_type=nonlinear.policy"
     policy = load_policy(policy_file_path)
     
     # Run simulations with "roll again" rule
