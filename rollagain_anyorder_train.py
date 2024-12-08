@@ -18,10 +18,10 @@ Q = np.zeros((1011011, 16))
 policy = np.zeros(1011011)
 
 # HYPERPARAMETERS
-eps = 1000
+eps = 5000
 gamma = 1
 lr = 0.1
-reward_type = "nonlinear"
+reward_type = "linear"
 
 for _ in range(eps):
     print(f"Episode {_ + 1}")
