@@ -129,8 +129,7 @@ def plot_convergence(results, errors):
 # Main execution
 if __name__ == "__main__":
     # Load policy file (pay attention to parameters!)
-    #policy_file_path = "eps=10000,gamma=1,lr=0.1.policy"
-    policy_file_path = "eps=10000,gamma=0.9,lr=0.1.policy"
+    policy_file_path = "eps=5000,gamma=1,lr=0.3.policy"
     policy = load_policy(policy_file_path)
     
     # Run simulations
